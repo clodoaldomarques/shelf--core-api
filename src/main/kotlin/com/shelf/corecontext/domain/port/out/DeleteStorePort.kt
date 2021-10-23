@@ -1,8 +1,9 @@
 package com.shelf.corecontext.domain.port.out
 
 import com.shelf.corecontext.domain.entity.Category
+import com.shelf.corecontext.domain.entity.Store
 
-interface DeleteCategoryPort {
-    fun delete(category: Category) : Unit
+interface DeleteStorePort {
+    fun delete(store: Store) : Unit
     fun deleteById(id : Int) : Unit
 }

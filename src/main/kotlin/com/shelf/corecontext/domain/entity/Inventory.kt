@@ -4,7 +4,7 @@ import java.math.BigDecimal
 import java.time.LocalDateTime
 
 data class Inventory(
-    val id : Int,
+    val id : Int?,
     val store : Store,
     val product : Product,
     val purchasePrice : BigDecimal,

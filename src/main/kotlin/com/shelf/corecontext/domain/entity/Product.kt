@@ -7,7 +7,7 @@ data class Product(
     val category: Category,
     val name : String,
     val description : String,
-    val unit : Unit,
+    val unit : MetricUnit,
     val denyNegativeBalance : Boolean,
     val registrationDate : LocalDateTime
 )

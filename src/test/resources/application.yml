@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/shelf?serverTimeZone=UTC
+    username: postgres
+    password: pgadmin
+server:
+  port: 5000
