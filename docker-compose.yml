@@ -1,0 +1,24 @@
+version: '3.4'
+services:
+  postgres:
+    image: postgres
+    container_name: postgresql-db
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=pgadmin
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=shelf
+    volumes:
+      - /home/clodoaldo/Workspace/data/pgdata:/var/lib/postgresql/data
+
+  mysql:
+    image: mysql
+    container_name: mysql-db
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=myadmin
+      - MYSQL_DATABASE=mercadolivro
+    volumes:
+      - /home/clodoaldo/Workspace/data/mydata:/var/lib/mysql
