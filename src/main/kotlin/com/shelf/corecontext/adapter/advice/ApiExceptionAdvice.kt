@@ -83,12 +83,12 @@ class ApiExceptionAdvice : ResponseEntityExceptionHandler() {
                 }
             }.toList()
 
-        val handler = MessageException(status.value(),
+        val message = MessageException(status.value(),
             "One or more fields are invalid, fill in correctly and try again",
             OffsetDateTime.now(),
             errors
         )
-        return super.handleMethodArgumentNotValid(ex, headers, status, request)
+        return ResponseEntity(message, status)
     }
 
 }
