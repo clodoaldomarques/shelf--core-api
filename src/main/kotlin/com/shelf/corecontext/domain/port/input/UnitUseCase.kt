@@ -1,4 +1,4 @@
-package com.shelf.corecontext.domain.port.`in`
+package com.shelf.corecontext.domain.port.input
 
 import com.shelf.corecontext.domain.entity.MetricUnit
 import java.util.*

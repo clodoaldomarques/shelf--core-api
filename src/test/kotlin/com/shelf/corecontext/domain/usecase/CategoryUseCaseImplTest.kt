@@ -4,10 +4,7 @@ import com.shelf.corecontext.buildCategory
 import com.shelf.corecontext.domain.entity.Category
 import com.shelf.corecontext.domain.exceptions.ResourceExistsException
 import com.shelf.corecontext.domain.exceptions.ResourceNotFoundException
-import com.shelf.corecontext.domain.port.out.CreateCategoryPort
-import com.shelf.corecontext.domain.port.out.DeleteCategoryPort
-import com.shelf.corecontext.domain.port.out.QueryCategoryPort
-import com.shelf.corecontext.domain.port.out.UpdateCategoryPort
+import com.shelf.corecontext.domain.port.output.CategoryPersistence
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
@@ -26,50 +23,44 @@ import kotlin.random.Random
 class CategoryUseCaseImplTest {
 
     @MockK
-    private lateinit var  createCategoryPort: CreateCategoryPort
-    @MockK
-    private lateinit var  queryCategoryPort: QueryCategoryPort
-    @MockK
-    private lateinit var  deleteCategoryPort: DeleteCategoryPort
-    @MockK
-    private lateinit var  updateCategoryPort: UpdateCategoryPort
+    private lateinit var  categoryPersistence: CategoryPersistence
     @InjectMockKs
     private lateinit var categoryUseCase: CategoryUseCaseImpl
 
     @Test
     fun `should return all categories`() {
         val fakeCategories = listOf<Category>(buildCategory(), buildCategory())
-        every { queryCategoryPort.findAll(0, 10, "asc") } returns fakeCategories
+        every { categoryPersistence.findAll(0, 10, "asc") } returns fakeCategories
         val categories = categoryUseCase.findAll(0, 10, "asc")
         assertEquals(fakeCategories, categories)
-        verify (exactly = 1) { queryCategoryPort.findAll(0, 10, "asc") }
+        verify (exactly = 1) { categoryPersistence.findAll(0, 10, "asc") }
     }
 
     @Test
     fun `should return a category by id`() {
         val id = Random.nextInt()
         val fakeCategory = buildCategory(id = id)
-        every { queryCategoryPort.findById(id) } returns Optional.of(fakeCategory)
+        every { categoryPersistence.findById(id) } returns Optional.of(fakeCategory)
         val category = categoryUseCase.findById(id)
         assertEquals(category.get(), fakeCategory)
-        verify (exactly = 1) { queryCategoryPort.findById(id) }
+        verify (exactly = 1) { categoryPersistence.findById(id) }
     }
 
     @Test
     fun `should create a category`() {
         val fakeCategory = buildCategory()
-        every { queryCategoryPort.findByNameExactly(fakeCategory.name)} returns Optional.empty()
-        every { createCategoryPort.create(fakeCategory) } returns fakeCategory
+        every { categoryPersistence.findByNameExactly(fakeCategory.name)} returns Optional.empty()
+        every { categoryPersistence.create(fakeCategory) } returns fakeCategory
         val newCategory = categoryUseCase.create(fakeCategory)
         assertEquals(fakeCategory, newCategory)
-        verify(exactly = 1) { queryCategoryPort.findByNameExactly(fakeCategory.name) }
-        verify(exactly = 1) {  createCategoryPort.create(fakeCategory) }
+        verify(exactly = 1) { categoryPersistence.findByNameExactly(fakeCategory.name) }
+        verify(exactly = 1) {  categoryPersistence.create(fakeCategory) }
     }
 
     @Test
     fun `should throw error when category exists in database`(){
         val fakeCategory = buildCategory()
-        every { queryCategoryPort.findByNameExactly(fakeCategory.name)} returns Optional.of(fakeCategory)
+        every { categoryPersistence.findByNameExactly(fakeCategory.name)} returns Optional.of(fakeCategory)
         val error = assertThrows<ResourceExistsException> {
             categoryUseCase.create(fakeCategory)
         }
@@ -80,21 +71,21 @@ class CategoryUseCaseImplTest {
     fun `should update a exists category`() {
         val id = Random.nextInt(0, 100000 )
         val fakeCategory = buildCategory(id = id)
-        every { queryCategoryPort.findById(id) } returns Optional.of(fakeCategory)
-        every {updateCategoryPort.update(fakeCategory)} returns fakeCategory
+        every { categoryPersistence.findById(id) } returns Optional.of(fakeCategory)
+        every {categoryPersistence.update(fakeCategory)} returns fakeCategory
 
         val categorySaved = categoryUseCase.update(fakeCategory)
 
         assertEquals(fakeCategory, categorySaved)
-        verify(exactly = 1) { queryCategoryPort.findById(id)  }
-        verify(exactly = 1) { updateCategoryPort.update(fakeCategory) }
+        verify(exactly = 1) { categoryPersistence.findById(id)  }
+        verify(exactly = 1) { categoryPersistence.update(fakeCategory) }
     }
 
     @Test
     fun `should throw error not found when category update`() {
         val id = Random.nextInt(0, 100000 )
         val fakeCategory = buildCategory(id = id)
-        every { queryCategoryPort.findById(id)} returns Optional.empty()
+        every { categoryPersistence.findById(id)} returns Optional.empty()
         val error = assertThrows<ResourceNotFoundException> {
             categoryUseCase.update(fakeCategory)
         }
@@ -105,20 +96,20 @@ class CategoryUseCaseImplTest {
     fun `should delete a exists category`() {
         val id = Random.nextInt(0, 100000 )
         val fakeCategory = buildCategory(id = id)
-        every { queryCategoryPort.findById(id) } returns Optional.of(fakeCategory)
-        every { deleteCategoryPort.delete(fakeCategory)} just Runs
+        every { categoryPersistence.findById(id) } returns Optional.of(fakeCategory)
+        every { categoryPersistence.delete(fakeCategory)} just Runs
 
         categoryUseCase.delete(fakeCategory)
 
-        verify(exactly = 1) { queryCategoryPort.findById(id)  }
-        verify(exactly = 1) { deleteCategoryPort.delete(fakeCategory) }
+        verify(exactly = 1) { categoryPersistence.findById(id)  }
+        verify(exactly = 1) { categoryPersistence.delete(fakeCategory) }
     }
 
     @Test
     fun `should throw error not found when category delete`() {
         val id = Random.nextInt(0, 100000 )
         val fakeCategory = buildCategory(id = id)
-        every { queryCategoryPort.findById(id)} returns Optional.empty()
+        every { categoryPersistence.findById(id)} returns Optional.empty()
         val error = assertThrows<ResourceNotFoundException> {
             categoryUseCase.delete(fakeCategory)
         }
@@ -129,19 +120,20 @@ class CategoryUseCaseImplTest {
     fun `should delete a exists category by id`() {
         val id = Random.nextInt(0, 100000 )
         val fakeCategory = buildCategory(id = id)
-        every { queryCategoryPort.findById(id) } returns Optional.of(fakeCategory)
-        every { deleteCategoryPort.deleteById(id)} just Runs
+        every { categoryPersistence.findById(id) } returns Optional.of(fakeCategory)
+        every { categoryPersistence.deleteById(id)} just Runs
+
 
         categoryUseCase.delete(id)
 
-        verify(exactly = 1) { queryCategoryPort.findById(id)  }
-        verify(exactly = 1) { deleteCategoryPort.deleteById(id) }
+        verify(exactly = 1) { categoryPersistence.findById(id)  }
+        verify(exactly = 1) { categoryPersistence.deleteById(id) }
     }
 
     @Test
     fun `should throw error not found when category delete by id`() {
         val id = Random.nextInt(0, 100000 )
-        every { queryCategoryPort.findById(id)} returns Optional.empty()
+        every { categoryPersistence.findById(id)} returns Optional.empty()
         val error = assertThrows<ResourceNotFoundException> {
             categoryUseCase.delete(id)
         }

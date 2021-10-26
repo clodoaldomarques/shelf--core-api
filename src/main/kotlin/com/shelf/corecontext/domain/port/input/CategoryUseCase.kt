@@ -1,10 +1,10 @@
-package com.shelf.corecontext.domain.port.`in`
+package com.shelf.corecontext.domain.port.input
 
 import com.shelf.corecontext.domain.entity.Category
 import java.util.*
 
 interface CategoryUseCase {
-    fun findAll(page : Int?, limit : Int?, direction : String?): List<Category>
+    fun findAll(page : Int, limit : Int, direction : String?): List<Category>
     fun findById(id : Int): Optional<Category>
     fun create(category: Category) : Category
     fun update(category: Category) : Category
