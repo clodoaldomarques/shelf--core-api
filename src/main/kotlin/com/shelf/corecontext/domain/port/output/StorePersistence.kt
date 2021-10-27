@@ -11,5 +11,4 @@ interface StorePersistence {
     fun findById(id : Int) : Optional<Store>
     fun findByName(name : String) : Optional<Store>
     fun update(store : Store) : Store
-
 }

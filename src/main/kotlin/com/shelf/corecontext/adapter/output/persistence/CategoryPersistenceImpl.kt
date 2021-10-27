@@ -27,9 +27,11 @@ class CategoryPersistenceImpl (private val repository : CategoryRepository ) : C
     }
 
     override fun findAll(page: Int, limit: Int, direction: String?): List<Category> {
+        val pageNumber = if(page >= 0) page else 0
+        val pageSize = if (limit > 0) limit else 10
         val sortDirection = if ("desc".equals(direction, ignoreCase = true)) Sort.Direction.DESC else Sort.Direction.ASC
         val sort = Sort.by(sortDirection, "name")
-        val pageable = PageRequest.of(page, limit, sort)
+        val pageable = PageRequest.of(pageNumber, pageSize, sort)
         return repository.findAll(pageable).map { it.toEntity() }.toList()
     }
 
