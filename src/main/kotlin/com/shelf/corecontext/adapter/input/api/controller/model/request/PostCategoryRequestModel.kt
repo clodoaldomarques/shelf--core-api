@@ -1,4 +1,4 @@
-package com.shelf.corecontext.adapter.input.controller.model.request
+package com.shelf.corecontext.adapter.input.api.controller.model.request
 
 import javax.validation.constraints.NotBlank
 

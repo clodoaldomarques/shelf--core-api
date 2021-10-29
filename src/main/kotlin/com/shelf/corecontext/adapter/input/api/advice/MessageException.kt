@@ -1,4 +1,4 @@
-package com.shelf.corecontext.adapter.advice
+package com.shelf.corecontext.adapter.input.api.advice
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import java.time.OffsetDateTime

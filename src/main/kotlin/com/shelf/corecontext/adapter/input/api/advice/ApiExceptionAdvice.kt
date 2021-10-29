@@ -1,4 +1,4 @@
-package com.shelf.corecontext.adapter.advice
+package com.shelf.corecontext.adapter.input.api.advice
 
 import com.shelf.corecontext.domain.exceptions.GenericBusinessException
 import com.shelf.corecontext.domain.exceptions.ResourceExistsException
@@ -76,7 +76,7 @@ class ApiExceptionAdvice : ResponseEntityExceptionHandler() {
     ): ResponseEntity<Any> {
         val errors = ex.allErrors.map {
                 if(it is FieldError){
-                    val error = it as FieldError
+                    val error = it
                     Error(error.field, error.defaultMessage)
                 } else {
                     Error(it.objectName, it.defaultMessage)

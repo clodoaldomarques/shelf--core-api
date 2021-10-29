@@ -1,11 +1,11 @@
-package com.shelf.corecontext.adapter.input.controller.impl
+package com.shelf.corecontext.adapter.input.api.controller.impl
 
-import com.shelf.corecontext.adapter.input.controller.CategoryController
-import com.shelf.corecontext.adapter.input.controller.model.request.PostCategoryRequestModel
-import com.shelf.corecontext.adapter.input.controller.model.request.PutCategoryRequestModel
-import com.shelf.corecontext.adapter.input.controller.model.response.CategoryResponseModel
-import com.shelf.corecontext.adapter.input.converter.toEntity
-import com.shelf.corecontext.adapter.input.converter.toModel
+import com.shelf.corecontext.adapter.input.api.controller.CategoryController
+import com.shelf.corecontext.adapter.input.api.controller.model.request.PostCategoryRequestModel
+import com.shelf.corecontext.adapter.input.api.controller.model.request.PutCategoryRequestModel
+import com.shelf.corecontext.adapter.input.api.controller.model.response.CategoryResponseModel
+import com.shelf.corecontext.adapter.input.api.converter.toEntity
+import com.shelf.corecontext.adapter.input.api.converter.toModel
 import com.shelf.corecontext.domain.port.input.CategoryUseCase
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated

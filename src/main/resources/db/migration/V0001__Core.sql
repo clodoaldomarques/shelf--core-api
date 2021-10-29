@@ -3,7 +3,7 @@ CREATE TABLE Category(
 	name varchar(100) NOT NULL
 );
 
-CREATE TABLE Unit(
+CREATE TABLE Measure(
 	id SERIAL PRIMARY KEY,
 	name varchar(100) NOT NULL,
 	initials varchar(50) NOT NULL
@@ -21,7 +21,7 @@ CREATE TABLE Product(
 	name varchar(100) NOT NULL,
 	description varchar(1000),
 	balance decimal(12,2),
-	unit_id Integer NOT NULL REFERENCES Unit,
+	measure_id Integer NOT NULL REFERENCES Measure,
 	deny_negative_balance boolean NOT NULL,
 	registration_date timestamp NOT NULL
 );
