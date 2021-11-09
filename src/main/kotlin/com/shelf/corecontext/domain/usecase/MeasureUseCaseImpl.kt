@@ -22,22 +22,22 @@ class MeasureUseCaseImpl(
         return measurePersistence.findById(id)
     }
 
-    override fun create(unit: Measure) : Measure {
-        val measureSaved = measurePersistence.findByName(unit.name)
+    override fun create(entity: Measure) : Measure {
+        val measureSaved = measurePersistence.findByName(entity.name)
         if (measureSaved.isPresent) throw ResourceExistsException("Measure already registered")
-        return measurePersistence.create(unit)
+        return measurePersistence.create(entity)
     }
 
-    override fun update(unit: Measure) : Measure{
-        val categorySaved = measurePersistence.findById(unit.id!!)
+    override fun update(entity: Measure) : Measure{
+        val categorySaved = measurePersistence.findById(entity.id!!)
         if (categorySaved.isEmpty) throw ResourceNotFoundException("Measure not found")
-        return measurePersistence.update(unit)
+        return measurePersistence.update(entity)
     }
 
-    override fun delete(unit: Measure){
-        val measureSaved = measurePersistence.findById(unit.id!!)
+    override fun delete(entity: Measure){
+        val measureSaved = measurePersistence.findById(entity.id!!)
         if (measureSaved.isEmpty) throw ResourceNotFoundException("Measure not found")
-        measurePersistence.delete(unit)
+        measurePersistence.delete(entity)
     }
 
     override fun delete(id: Int){

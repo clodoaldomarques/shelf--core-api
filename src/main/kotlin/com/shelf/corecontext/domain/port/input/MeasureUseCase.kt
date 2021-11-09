@@ -6,8 +6,8 @@ import java.util.*
 interface MeasureUseCase {
     fun findAll(page : Int, limit : Int, direction : String?): List<Measure>
     fun findById(id : Int): Optional<Measure>
-    fun create(unit: Measure) : Measure
-    fun update(unit: Measure) : Measure
-    fun delete(unit: Measure)
+    fun create(entity: Measure) : Measure
+    fun update(entity: Measure) : Measure
+    fun delete(entity: Measure)
     fun delete(id: Int)
 }

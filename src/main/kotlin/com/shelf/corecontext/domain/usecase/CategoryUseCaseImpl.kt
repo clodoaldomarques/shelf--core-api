@@ -22,22 +22,22 @@ class CategoryUseCaseImpl(
         return categoryPersistence.findById(id)
     }
 
-    override fun create(category: Category) : Category {
-        val categorySaved = categoryPersistence.findByNameExactly(category.name)
+    override fun create(entity: Category) : Category {
+        val categorySaved = categoryPersistence.findByNameExactly(entity.name)
         if (categorySaved.isPresent) throw ResourceExistsException("Category already registered")
-        return categoryPersistence.create(category)
+        return categoryPersistence.create(entity)
     }
 
-    override fun update(category: Category) : Category{
-        val categorySaved = categoryPersistence.findById(category.id!!)
+    override fun update(entity: Category) : Category{
+        val categorySaved = categoryPersistence.findById(entity.id!!)
         if (categorySaved.isEmpty) throw ResourceNotFoundException("Category not found")
-        return categoryPersistence.update(category)
+        return categoryPersistence.update(entity)
     }
 
-    override fun delete(category: Category){
-        val categorySaved = categoryPersistence.findById(category.id!!)
+    override fun delete(entity: Category){
+        val categorySaved = categoryPersistence.findById(entity.id!!)
         if (categorySaved.isEmpty) throw ResourceNotFoundException("Category not found")
-        categoryPersistence.delete(category)
+        categoryPersistence.delete(entity)
     }
 
     override fun delete(id: Int){

@@ -1,5 +1,5 @@
 package com.shelf.corecontext.domain.exceptions
 
-class GenericBusinessException : RuntimeException() {
+class GenericBusinessException(message : String) : RuntimeException(message) {
 
 }

@@ -38,7 +38,7 @@ class StoreUseCaseImplTest {
 
     @Test
     fun `should return a Store by id`() {
-        val id = Random.nextInt()
+        val id = Random.nextInt(0, 100000 )
         val fakeStore = buildStore(id = id)
         every { storePersistence.findById(id) } returns Optional.of(fakeStore)
         val Store = storeUseCase.findById(id)

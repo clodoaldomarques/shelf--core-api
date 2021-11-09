@@ -1,6 +1,6 @@
 package com.shelf.corecontext.domain.entity
 
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 data class Product(
     val barCode : String,
@@ -9,5 +9,5 @@ data class Product(
     val description : String,
     val unit : Measure,
     val denyNegativeBalance : Boolean,
-    val registrationDate : LocalDateTime
+    val registrationDate : OffsetDateTime
 )
