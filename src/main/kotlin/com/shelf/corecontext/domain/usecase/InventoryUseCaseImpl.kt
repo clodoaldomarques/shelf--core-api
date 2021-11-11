@@ -18,8 +18,7 @@ class InventoryUseCaseImpl (
 
     @Transactional
     override fun create(entity: Inventory): Inventory {
-        val id = entity.store.id ?: throw GenericBusinessException("Store Identification is required")
-        val optional = inventoryPersistence.findByStoreIdAndBarCode(entity.store.id, entity.product.barCode)
+        val optional = inventoryPersistence.findByStoreIdAndBarCode(entity.store.id!!, entity.product.barCode)
         if (optional.isPresent) throw ResourceExistsException("Inventory already registered")
         return inventoryPersistence.create(entity)
     }
@@ -33,8 +32,7 @@ class InventoryUseCaseImpl (
 
     @Transactional
     override fun increase(store: Store, product: Product, value: BigDecimal) {
-        val id = store.id ?: throw GenericBusinessException("Store Identification is required")
-        val optional = inventoryPersistence.findByStoreIdAndBarCode(id, product.barCode)
+        val optional = inventoryPersistence.findByStoreIdAndBarCode(store.id!!, product.barCode)
         if (optional.isEmpty) throw ResourceNotFoundException("Inventory not found")
         val entitySaved = optional.get()
         entitySaved.increase(value)
@@ -43,8 +41,7 @@ class InventoryUseCaseImpl (
 
     @Transactional
     override fun decrease(store: Store, product: Product, value: BigDecimal) {
-        val id = store.id ?: throw GenericBusinessException("Store Identification is required")
-        val optional = inventoryPersistence.findByStoreIdAndBarCode(id, product.barCode)
+        val optional = inventoryPersistence.findByStoreIdAndBarCode(store.id!!, product.barCode)
         if (optional.isEmpty) throw ResourceNotFoundException("Inventory not found")
         val entitySaved = optional.get()
         entitySaved.decrease(value)
@@ -81,8 +78,7 @@ class InventoryUseCaseImpl (
     }
 
     override fun findByStoreAndProduct(store: Store, product: Product): Optional<Inventory> {
-        val id = store.id ?: throw GenericBusinessException("Store Identification is required")
-        return inventoryPersistence.findByStoreIdAndBarCode(id, product.barCode)
+        return inventoryPersistence.findByStoreIdAndBarCode(store.id!!, product.barCode)
     }
 
     override fun findAllByStore(store: Store, page: Int, limit: Int, direction: String?): List<Inventory> {

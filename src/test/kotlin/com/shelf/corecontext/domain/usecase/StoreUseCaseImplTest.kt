@@ -140,4 +140,6 @@ class StoreUseCaseImplTest {
         assertEquals("Store not found", error.message)
     }
 
+
+
 }

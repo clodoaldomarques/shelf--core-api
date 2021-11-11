@@ -4,21 +4,21 @@ import com.shelf.corecontext.buildInventory
 import com.shelf.corecontext.buildProduct
 import com.shelf.corecontext.buildStore
 import com.shelf.corecontext.domain.entity.Inventory
+import com.shelf.corecontext.domain.exceptions.GenericBusinessException
 import com.shelf.corecontext.domain.exceptions.ResourceExistsException
 import com.shelf.corecontext.domain.exceptions.ResourceNotFoundException
 import com.shelf.corecontext.domain.port.output.InventoryPersistence
-import io.mockk.Runs
-import io.mockk.every
+import io.mockk.*
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
-import io.mockk.just
-import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
+import java.math.BigDecimal
 import java.util.*
+import javax.validation.constraints.AssertTrue
 import kotlin.random.Random
 
 @ExtendWith(MockKExtension::class)
@@ -28,6 +28,8 @@ class InventoryUseCaseImplTest {
     private lateinit var  inventoryPersistence: InventoryPersistence
     @InjectMockKs
     private lateinit var inventoryUseCase: InventoryUseCaseImpl
+
+    val inventorySlot = slot<Inventory>()
 
     @Test
     fun `should return all inventories by store`() {
@@ -99,4 +101,37 @@ class InventoryUseCaseImplTest {
         }
         assertEquals("Inventory not found", error.message)
     }
+
+    @Test
+    fun `should increase product balance on inventory`(){
+        val id = Random.nextInt(0, 100000 )
+        val fakeInventory = buildInventory(id = id, store = buildStore(id = id))
+        val increaseValue = BigDecimal.ONE
+        every { inventoryPersistence.findByStoreIdAndBarCode(fakeInventory.store.id!!, fakeInventory.product.barCode)} returns Optional.of(fakeInventory)
+        every { inventoryPersistence.update(fakeInventory)} returns fakeInventory
+
+        inventoryUseCase.increase(fakeInventory.store, fakeInventory.product, increaseValue)
+
+        verify(exactly = 1) { inventoryPersistence.findByStoreIdAndBarCode(fakeInventory.store.id!!, fakeInventory.product.barCode) }
+        verify(exactly = 1) { inventoryPersistence.update(capture(inventorySlot)) }
+
+        assertEquals(fakeInventory, inventorySlot.captured)
+    }
+
+    @Test
+    fun `should decrease product balance on inventory`(){
+        val id = Random.nextInt(0, 100000 )
+        val fakeInventory = buildInventory(id = id, store = buildStore(id = id))
+        val increaseValue = BigDecimal.ONE
+        every { inventoryPersistence.findByStoreIdAndBarCode(fakeInventory.store.id!!, fakeInventory.product.barCode)} returns Optional.of(fakeInventory)
+        every { inventoryPersistence.update(fakeInventory)} returns fakeInventory
+
+        inventoryUseCase.decrease(fakeInventory.store, fakeInventory.product, increaseValue)
+
+        verify(exactly = 1) { inventoryPersistence.findByStoreIdAndBarCode(fakeInventory.store.id!!, fakeInventory.product.barCode) }
+        verify(exactly = 1) { inventoryPersistence.update(capture(inventorySlot)) }
+
+        assertEquals(fakeInventory, inventorySlot.captured)
+    }
+
 }
