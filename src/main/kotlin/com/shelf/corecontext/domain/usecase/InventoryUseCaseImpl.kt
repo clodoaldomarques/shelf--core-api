@@ -49,8 +49,8 @@ class InventoryUseCaseImpl (
     }
 
     @Transactional
-    override fun updatePurchasePrice(product: Product, value: BigDecimal) {
-        val inventories = inventoryPersistence.findInventoryByProductBarCode(product.barCode)
+    override fun updatePurchasePrice(product: String, value: BigDecimal) {
+        val inventories = inventoryPersistence.findInventoryByProductBarCode(product)
         inventories.map { i -> i.updatePurchasePrice(value) }
         inventories.forEach(){
             inventoryPersistence.update(it)
@@ -58,8 +58,8 @@ class InventoryUseCaseImpl (
     }
 
     @Transactional
-    override fun updateSalePrice(product: Product, value: BigDecimal) {
-        val inventories = inventoryPersistence.findInventoryByProductBarCode(product.barCode)
+    override fun updateSalePrice(product: String, value: BigDecimal) {
+        val inventories = inventoryPersistence.findInventoryByProductBarCode(product)
         inventories.map { i -> i.updateSalePrice(value) }
         inventories.forEach(){
             inventoryPersistence.update(it)

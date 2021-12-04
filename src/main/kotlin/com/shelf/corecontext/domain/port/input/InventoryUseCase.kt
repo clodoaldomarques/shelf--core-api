@@ -11,8 +11,8 @@ interface InventoryUseCase {
     fun delete(entity: Inventory)
     fun increase(store: Store, product: Product, value: BigDecimal)
     fun decrease(store: Store, product: Product, value: BigDecimal)
-    fun updatePurchasePrice(product: Product, value: BigDecimal)
-    fun updateSalePrice(product: Product, value: BigDecimal)
+    fun updatePurchasePrice(product: String, value: BigDecimal)
+    fun updateSalePrice(product: String, value: BigDecimal)
     fun transfer(product: Product, origin : Store, destiny : Store, value: BigDecimal)
     fun findByStoreAndProduct(store : Store, product: Product): Optional<Inventory>
     fun findAllByStore(store : Store, page : Int, limit : Int, direction : String?): List<Inventory>
